@@ -1,0 +1,16 @@
+import cv2
+# open camera
+cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
+# set dimensions
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+# take frame
+ret, frame = cap.read()
+# write frame to file
+cv2.imwrite('image.jpg', frame)
+# display frame on screen
+cv2.imshow('image', frame)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+# release camera
+cap.release()

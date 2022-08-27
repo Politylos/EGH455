@@ -1,0 +1,10 @@
+[Unit]
+Description=Custom Startup Script
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python /home/group12/EGH455/display/display.py & > /home/group12/startup_display.log 2>&1
+
+[Install]
+WantedBy=multi-user.target

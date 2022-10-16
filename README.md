@@ -1,6 +1,6 @@
 # EGH455
 ## EGH455 Advance System Design
-This github repository is for group12's EGH455 raspberry pi codebase.
+This github repository is for group12's EGH455 raspberry pi code.
 
 ### Raspberry PI login details
 The username for the RPi is `group12`.  
@@ -21,9 +21,46 @@ git clone https://github.com/kossu-dog/EGH455.git
 cd EGH455
 sudo ./install.sh
 ```
-
 ---
 
+## How to use
+After running `install.sh` the system startup script will be modified to load the webserver on boot.  
+To connect to the webserver, use the IP address shown on the LCD screen, with the port 5000.
+```
+http://172.19.19.30:5000
+```
+
+To restart the webserver after making changes to the webserver files use the following command.
+```
+sudo systemctl restart startup.service
+```
+---
+
+## Usage ** DEPRECIATED **
+### Startup script file
+```
+startup.sh
+```
+This file is called on system startup. Place startup commands in this file.
+### Display IP adress and current time on LCD  
+```
+/display/display.py
+```  
+Shows the current IP address of the RPi and the current system time.
+### Take a photo with RPi Camera
+```
+/camera/test.py
+```
+Takes a single photo from the RPi Camera and saves it to a file named `image.jpg`  
+### Take a video with RPi Camera
+```
+/camera/record.py <output_file.mp4>
+```
+Records video from the RPi Camera. Replace `<output_file.mp4>` with the output filename, or leave blank for default.  
+Press `CTRL-C` to stop recording
+
+---
+## Details
 ### Startup script  
 
 Startup script is controlled by systemd. Info can be found at [Five Ways To Run a Program On Your Raspberry Pi At Startup](https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/#systemd).  

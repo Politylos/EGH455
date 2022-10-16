@@ -1,0 +1,15 @@
+item {
+    name: "Fire-extinguisher",
+    id: 1,
+    display_name: "Fire-extinguisher"
+}
+item {
+    name: "Valve Close",
+    id: 2,
+    display_name: "Valve Close"
+}
+item {
+    name: "Valve Open",
+    id: 3,
+    display_name: "Valve Open"
+}

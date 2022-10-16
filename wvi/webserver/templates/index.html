@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Sensor Graphs</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body style="background-color: lightgrey" allow="autoplay">
+    <!-- <iframe src="/static/audio/startup.mp3" allow="autoplay"></iframe> -->
+<!-- Title -->
+    <div style="position:absolute; top:-10px; left:850px; z-index:1">
+        <p style="font-weight:bold; font-size:x-large">UAVTAQ Group 12 2022</p>
+    </div>
+<!-- Video Feed -->
+    <div id="video_feed_label" style="position:absolute; top:50px; left:0px; z-index:1">
+        <img id="video_feed_label_1" class="center" src="/static/images/label_livefeed.png" width="50" height="240">
+    </div>
+    <div id="video_feed" style="position:absolute; top:50px; left:50px; z-index:1; text-align: center">
+        <img id="bg" class="center" src="{{ url_for('video_feed') }}" width="320" height="240" style="border:1px solid #010101;">
+    </div>
+
+<!-- Target 1 - Extiguisher -->
+    <div id="target1_label" style="position:absolute; top:300px; left:0px; z-index:1">
+        <img id="target1_label_1" class="center" src="/static/images/label_target1.png" width="50" height="240">
+    </div>
+    <div id="target1" style="position:absolute; top:300px; left:50px; z-index:1; text-align: center">
+        <img id="target_1" class="center" src="/static/images/no_target.png" width="320" height="240" style="border:1px solid #010101;">
+    </div>
+    <div id="target1_table" style="position:absolute; top:300px; left:380px; z-index:1; background-color: white; text-align: right; border:1px solid black; border-collapse:collapse; padding:5px;">
+        <table height="230">
+            <tr>
+                <th style="width:60px; text-align:left; font-weight:bold; font-size:larger;">Sensor</th>
+                <th style="width:30px">Value</th>
+            </tr>
+            <tr>
+                <th style="text-align:left">Temp</th>
+                <td id="table_target1_temp">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">Pres</th>
+                <td id="table_target1_pres">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">Humd</th>
+                <td id="table_target1_humd">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">Light</th>
+                <td id="table_target1_ligh">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">NO2</th>
+                <td id="table_target1_oxid">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">CO</th>
+                <td id="table_target1_redu">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">NH3</th>
+                <td id="table_target1_nh3">----.--</td>
+            </tr>
+            <tr>
+                <th></th>
+                <td></td>
+            </tr>
+            <tr>
+                <th id="table_target1_detected1" style="text-align:right">NOT</th>
+                <th id="table_target1_detected2">DETECTED!</th>
+            </tr>
+            <tr>
+                <th>Time:</th>
+                <th id="table_target1_time" style="text-align:center">--:--:--</th>
+            </tr>
+        </table>
+    </div>
+
+<!-- Target 2 - Valve -->
+    <div id="target2_label" style="position:absolute; top:550px; left:0px; z-index:1">
+        <img id="target2_label_1" class="center" src="/static/images/label_target2.png" width="50" height="240">
+    </div>
+    <div id="target2" style="position:absolute; top:550px; left:50px; z-index:1; text-align: center">
+        <img id="target_2" class="center" src="/static/images/no_target.png" width="320" height="240" style="border:1px solid #010101;">
+    </div>
+    <div id="target2_table" style="position:absolute; top:550px; left:380px; z-index:1; background-color: white; text-align: right; border:1px solid black; border-collapse:collapse; padding:5px;">
+        <table height="230">
+            <tr>
+                <th style="width:60px; text-align:left; font-weight:bold; font-size:larger;">Sensor</th>
+                <th style="width:30px">Value</th>
+            </tr>
+            <tr>
+                <th style="text-align:left">Temp</th>
+                <td id="table_target2_temp">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">Pres</th>
+                <td id="table_target2_pres">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">Humd</th>
+                <td id="table_target2_humd">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">Light</th>
+                <td id="table_target2_ligh">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">NO2</th>
+                <td id="table_target2_oxid">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">CO</th>
+                <td id="table_target2_redu">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">NH3</th>
+                <td id="table_target2_nh3">----.--</td>
+            </tr>
+            <tr>
+                <th></th>
+                <td></td>
+            </tr>
+            <tr>
+                <th id="table_target2_detected1" style="text-align:right">NOT</th>
+                <th id="table_target2_detected2">DETECTED!</th>
+            </tr>
+            <tr>
+                <th>Time:</th>
+                <th id="table_target2_time" style="text-align:center">--:--:--</th>
+            </tr>
+        </table>
+    </div>
+
+<!-- Target 3 - Aruco other -->
+    <div id="target3_label" style="position:absolute; top:800px; left:0px; z-index:1">
+        <img id="target3_label_1" class="center" src="/static/images/label_target3.png" width="50" height="240">
+    </div>
+    <div id="target3" style="position:absolute; top:800px; left:50px; z-index:1; text-align: center">
+        <img id="target3_img" class="center" src="/static/images/no_target.png" width="320" height="240" style="border:1px solid #010101;">
+    </div>
+    <div id="target3_table" style="position:absolute; top:800px; left:380px; z-index:1; background-color: white; text-align: right; border:1px solid black; border-collapse:collapse; padding:5px;">
+        <table height="230">
+            <tr>
+                <th style="width:60px; text-align:left; font-weight:bold; font-size:larger;">Sensor</th>
+                <th style="width:30px">Value</th>
+            </tr>
+            <tr>
+                <th style="text-align:left">Temp</th>
+                <td id="table_target3_temp">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">Pres</th>
+                <td id="table_target3_pres">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">Humd</th>
+                <td id="table_target3_humd">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">Light</th>
+                <td id="table_target3_ligh">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">NO2</th>
+                <td id="table_target3_oxid">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">CO</th>
+                <td id="table_target3_redu">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">NH3</th>
+                <td id="table_target3_nh3">----.--</td>
+            </tr>
+            <tr>
+                <th></th>
+                <td></td>
+            </tr>
+            <tr>
+                <th id="table_target3_detected1" style="text-align:right">NOT</th>
+                <th id="table_target3_detected2">DETECTED!</th>
+            </tr>
+            <tr>
+                <th>Time:</th>
+                <th id="table_target3_time" style="text-align:center">--:--:--</th>
+            </tr>
+        </table>
+    </div>
+
+<!-- Target 4 - Aruco45 -->
+    <div id="target4_label" style="position:absolute; top:800px; left:1770px; z-index:1">
+        <img id="target4_label_1" class="center" src="/static/images/label_target4.png" width="50" height="240">
+    </div>
+    <div id="target4" style="position:absolute; top:800px; left:1450px; z-index:1; text-align: center">
+        <img id="target4_img" class="center" src="/static/images/no_target.png" width="320" height="240" style="border:1px solid #010101;">
+    </div>
+    <div id="target4_table" style="position:absolute; top:800px; left:1280px; z-index:1; background-color: white; text-align: right; border:1px solid black; border-collapse:collapse; padding:5px;">
+        <table height="230">
+            <tr>
+                <th style="width:60px; text-align:left; font-weight:bold; font-size:larger;">Sensor</th>
+                <th style="width:30px">Value</th>
+            </tr>
+            <tr>
+                <th style="text-align:left">Temp</th>
+                <td id="table_target4_temp">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">Pres</th>
+                <td id="table_target4_pres">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">Humd</th>
+                <td id="table_target4_humd">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">Light</th>
+                <td id="table_target4_ligh">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">NO2</th>
+                <td id="table_target4_oxid">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">CO</th>
+                <td id="table_target4_redu">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">NH3</th>
+                <td id="table_target4_nh3">----.--</td>
+            </tr>
+            <tr>
+                <th></th>
+                <td></td>
+            </tr>
+            <tr>
+                <th id="table_target4_detected1" style="text-align:right">NOT</th>
+                <th id="table_target4_detected2">DETECTED!</th>
+            </tr>
+            <tr>
+                <th>Time:</th>
+                <th id="table_target4_time" style="text-align:center">--:--:--</th>
+            </tr>
+        </table>
+    </div>
+
+<!-- Sensors Graph -->
+    <div id="canvas_bme280" style="position:absolute; top:50px; left:565px; z-index:1">
+        <canvas id="chart_bme280" width="700" height="400"
+            style="background-color: white; border:1px solid #010101;"></canvas>
+    </div>
+<!-- Gas Graph -->
+    <div id="canvas_gas" style="position:absolute; top:460px; left:565px; z-index:1">
+        <canvas id="chart_gas" width="700" height="400"
+            style="background-color: white; border:1px solid #010101;"></canvas>
+        <br>
+        <!-- <p>Set plot duration
+            <button id="0" type="button">10 minutes</button>
+            <button id="1" type="button">60 seconds</button>
+        </p> -->
+    </div>
+
+<!-- Sensors Table -->
+    <div id="sensors_table"
+        style="position:absolute; top:50px; left:1280px; z-index:1; width:450px; background-color: white; text-align: right; border:1px solid black; border-collapse:collapse; padding:5px;">
+        <table>
+            <tr>
+                <th style="width:180px; text-align:left; font-weight:bold; font-size:larger;">Enviro Sensors</th>
+                <th style="width:80px">Current</th>
+                <th style="width:80px">Minimum</th>
+                <th style="width:80px">Maximum</th>
+            </tr>
+            <tr>
+                <th style="text-align:left">CPU Temperature (°C)</th>
+                <td id="table_cpu_temp_cur">--.--</td>
+                <td id="table_cpu_temp_min">--.--</td>
+                <td id="table_cpu_temp_max">--.--</td>
+            </tr>
+            <tr>
+
+                <th style="text-align:left">Sensor Temperature (°C)</th>
+                <td id="table_sen_temp_cur">--.--</td>
+                <td id="table_sen_temp_min">--.--</td>
+                <td id="table_sen_temp_max">--.--</td>
+            </tr>
+            <tr>
+
+                <th style="text-align:left">Sensor Pressure (hPa)</th>
+                <td id="table_sen_pres_cur">----.--</td>
+                <td id="table_sen_pres_min">----.--</td>
+                <td id="table_sen_pres_max">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">Sensor Humidity (%)</th>
+                <td id="table_sen_humd_cur">--.--</td>
+                <td id="table_sen_humd_min">--.--</td>
+                <td id="table_sen_humd_max">--.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">Sensor Light (lux)</th>
+                <td id="table_sen_ligh_cur">---.--</td>
+                <td id="table_sen_ligh_min">---.--</td>
+                <td id="table_sen_ligh_max">---.--</td>
+            </tr>
+        </table>
+    </div>
+    <!-- Gas Table -->
+    <div id="gas_table"
+        style="position:absolute; top:210px; left:1280px; z-index:1; width:450px; background-color: white; text-align: right; border:1px solid black; border-collapse:collapse; padding:5px">
+        <table>
+            <tr>
+                <th style="width:180px; text-align:left; font-weight:bold; font-size:larger;">Gas Sensors</th>
+                <th style="width:80px">Current</th>
+                <th style="width:80px">Minimum</th>
+                <th style="width:80px">Maximum</th>
+            </tr>
+            <tr>
+                <th style="text-align:left">NO2 Gas (ppm)</th>
+                <td id="table_gas_oxid_cur">----.--</td>
+                <td id="table_gas_oxid_min">----.--</td>
+                <td id="table_gas_oxid_max">----.--</td>
+            </tr>
+            <tr>
+
+                <th style="text-align:left">CO Gas (ppm)</th>
+                <td id="table_gas_redu_cur">----.--</td>
+                <td id="table_gas_redu_min">----.--</td>
+                <td id="table_gas_redu_max">----.--</td>
+
+            </tr>
+            <tr>
+
+                <th style="text-align:left">NH3 Gas (ppm)</th>
+                <td id="table_gas_nh3_cur">----.--</td>
+                <td id="table_gas_nh3_min">----.--</td>
+                <td id="table_gas_nh3_max">----.--</td>
+            </tr>
+        </table>
+    </div>
+    <!-- LCD Buttons -->
+    <div
+        style="position:absolute; top:330px; left:1280px; width:440px; z-index:1; background-color: white; text-align: left; border:1px solid black; border-collapse:collapse;padding:10px;">
+        <p style="text-align:left; font-weight:bold; font-size:larger;">Select Display for LCD Screen</p>
+        <button class="command command-option1" value="option1"> Show IP addr</button> <br>
+        <div style="height:5px;"></div>
+        <button class="command command-option2" value="option2"> Show Sensors </button> <br>
+        <div style="height:5px;"></div>
+        <button class="command command-option3" value="option3"> Show Livefeed </button> <br>
+        <!-- <a href="/lcd_ctrl/screen1" class="button">Screen 1</a>
+        <a href="/lcd_ctrl/screen2" class="button">Screen 2</a>
+        <a href="/lcd_ctrl/screen3" class="button">Screen 3</a> -->
+        <!-- <form action="/set_lcd_display" method="POST"> -->
+            <!-- <p style="font-weight:bold; font-size:larger;">Select Display Screen for LCD</p>
+            <input type="radio" id="option1" name="lcd_display" value="option1" checked="checked">
+            <label for="option1">IP Details</label><br>
+            <input type="radio" id="option2" name="lcd_display" value="option2">
+            <label for="option2">Sensor Readings</label><br>
+            <input type="radio" id="option3" name="lcd_display" value="option3">
+            <label for="option3">Live Video</label>
+            <br><br>
+            <input type="submit" value="Submit"> -->
+        <!-- </form> -->
+    </div>
+    <!-- Soil Sampler Control -->
+    <div
+        style="position:absolute; top:500px; left:1280px; width:440px; z-index:1; background-color: white; text-align: left; border:1px solid black; border-collapse:collapse;padding:10px;">
+        <p style="text-align:left; font-weight:bold; font-size:larger;">Soil Sampling Tube Control</p>
+        <button class="command command-deploy_ss" value="deploy_ss" id="button_deploy_ss" disabled> Activate Sample Tube</button>
+    </div>
+<!-- Arcuo Marker Coordinates -->
+<div style="position:absolute; top:900px; left:565px; z-index:1; width:300px; background-color: white; text-align: right; border:1px solid black; border-collapse:collapse; padding:5px">
+    <table>
+        <tr>
+            <th style="width:160px; text-align:left; font-weight:bold; font-size:larger;">Aruco Marker ID</th>
+            <th style="width:40px" id="table_aruco_id">N/A</th>
+        </tr>
+        <tr>
+            <th style="text-align:left">X axis</th>
+            <td id="table_aruco_x">----.--</td>
+        </tr>
+        <tr>
+            <th style="text-align:left">Y axis</th>
+            <td id="table_aruco_y">----.--</td>
+        </tr>
+        <tr>
+            <th style="text-align:left">Z axis</th>
+            <td id="table_aruco_z">----.--</td>
+        </tr>
+    </table>
+</div>
+<!-- Arcuo45 Marker Coordinates -->
+    <div style="position:absolute; top:900px; left:950px; z-index:1; width:300px; background-color: white; text-align: right; border:1px solid black; border-collapse:collapse; padding:5px">
+        <table>
+            <tr>
+                <th style="width:160px; text-align:left; font-weight:bold; font-size:larger;">Aruco Marker ID</th>
+                <th style="width:40px" id="table_aruco45_id">N/A</th>
+            </tr>
+            <tr>
+                <th style="text-align:left">X axis</th>
+                <td id="table_aruco45_x">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">Y axis</th>
+                <td id="table_aruco45_y">----.--</td>
+            </tr>
+            <tr>
+                <th style="text-align:left">Z axis</th>
+                <td id="table_aruco45_z">----.--</td>
+            </tr>
+        </table>
+    </div>
+
+<!-- Javascript Variables -->
+    <script>
+        // Number of points in graphs (600 = 10 minutes, 1 Hz logging)
+        var plot_size = 600;
+        // Flags for target detections
+        var target_detected_valve = false;
+        var target_detected_fire = false;
+        var target_detected_aruco45 = false;
+        var target_detected_aruco = false;
+    </script>
+
+<!-- Control for buttons -->
+    <script>
+        addEventListener("DOMContentLoaded", function()
+        {
+            var commandButtons = document.querySelectorAll(".command");
+            for (var i = 0, l = commandButtons.length; i < l; i++)
+            {
+                var button = commandButtons[i];
+                button.addEventListener("click", function(e)
+                {
+                    e.preventDefault();
+                    var clickedButton = e.target;
+                    var command = clickedButton.value;
+
+                    var request = new XMLHttpRequest();
+                    console.log("Button press");
+                    // request.onload = function()
+                    // {
+                    //     alert(request.responseText);
+                    // };
+                    request.open("GET", "/button/" + command, true);
+                    request.send();
+                });
+            }
+        }, true);
+    </script>
+
+<!-- Control for graphs -->
+    <script>
+        // console.log(target_detected_aruco45);
+        // Function to extend database to 10 minutes
+        Array.prototype.extend = function (other_array)
+        {
+            other_array.forEach(function (v) { this.push(v) }, this);
+        }
+
+        // Get database data
+        db_time = {{ labels | safe }};
+        db_cpu_temp = {{ sensor1_values | safe }};
+        db_bme280_temp = {{ sensor2_values | safe }};
+        db_bme280_pres = {{ sensor3_values | safe }};
+        db_bme280_humd = {{ sensor4_values | safe }};
+        db_light = {{ sensor5_values | safe }};
+        db_gas_reducing = {{ sensor6_values | safe }};
+        db_gas_oxidising = {{ sensor7_values | safe }};
+        db_gas_nh3 = {{ sensor8_values | safe }};
+
+        // Chop arrays to keep last 'plot_size' number of values
+        if (db_time.length >= plot_size)
+        {
+            db_time.splice(0, db_time.length - plot_size);
+            db_cpu_temp.splice(0, db_cpu_temp.length - plot_size);
+            db_bme280_temp.splice(0, db_bme280_temp.length - plot_size);
+            db_bme280_pres.splice(0, db_bme280_pres.length - plot_size);
+            db_bme280_humd.splice(0, db_bme280_humd.length - plot_size);
+            db_light.splice(0, db_light.length - plot_size);
+            db_gas_reducing.splice(0, db_gas_reducing.length - plot_size);
+            db_gas_oxidising.splice(0, db_gas_oxidising.length - plot_size);
+            db_gas_nh3.splice(0, db_gas_nh3.length - plot_size);
+        }
+        else
+        // Extend arrays to fit length of 'plot_size'
+        {
+            // Time label
+            db_time_data = Array(plot_size - db_time.length).fill("00:00:00");
+            db_time_data.extend(db_time);
+            db_time = db_time_data.map((x) => x);
+
+            // cpu temperature data
+            db_cpu_temp_data = Array(plot_size - db_cpu_temp.length).fill(null);
+            db_cpu_temp_data.extend(db_cpu_temp);
+            db_cpu_temp = db_cpu_temp.map((x) => x);
+            // bme280 temperature data
+            db_bme280_temp_data = Array(plot_size - db_bme280_temp.length).fill(null);
+            db_bme280_temp_data.extend(db_bme280_temp);
+            db_bme280_temp = db_bme280_temp_data.map((x) => x);
+            // bme280 pressure data
+            db_bme280_pres_data = Array(plot_size - db_bme280_pres.length).fill(null);
+            db_bme280_pres_data.extend(db_bme280_pres);
+            db_bme280_pres = db_bme280_pres_data.map((x) => x);
+            // bme280 humidity data
+            db_bme280_humd_data = Array(plot_size - db_bme280_humd.length).fill(null);
+            db_bme280_humd_data.extend(db_bme280_humd);
+            db_bme280_humd = db_bme280_humd_data.map((x) => x);
+            // light sensor data
+            db_light_data = Array(plot_size - db_light.length).fill(null);
+            db_light_data.extend(db_light);
+            db_light = db_light_data.map((x) => x);
+            // Gas oxidising
+            db_gas_oxidising_data = Array(plot_size - db_gas_oxidising.length).fill(null);
+            db_gas_oxidising_data.extend(db_gas_oxidising);
+            db_gas_oxidising = db_gas_oxidising_data.map((x) => x);
+            // Gas reducing
+            db_gas_reducing_data = Array(plot_size - db_gas_reducing.length).fill(null);
+            db_gas_reducing_data.extend(db_gas_reducing);
+            db_gas_reducing = db_gas_reducing_data.map((x) => x);
+            // Gas NH3
+            db_gas_nh3_data = Array(plot_size - db_gas_nh3.length).fill(null);
+            db_gas_nh3_data.extend(db_gas_nh3);
+            db_gas_nh3 = db_gas_nh3_data.map((x) => x);
+
+        }
+
+        $(document).ready(function ()
+        {
+            const config_bme280 =
+            {
+                type: 'line',
+                data:
+                {
+                    //labels: Array(plot_size).fill("00:00:00"),
+                    labels: db_time,
+                    datasets:
+                        [
+                            {
+                                label: "Temperature",
+                                backgroundColor: 'red',
+                                borderColor: 'red',
+                                //data: Array(plot_size).fill(null).extend({{values | safe }}),
+                                data: db_bme280_temp,
+                                fill: false,
+                                yAxisID: 'y1',
+                            },
+                            {
+                                label: "Pressure",
+                                backgroundColor: 'orange',
+                                borderColor: 'orange',
+                                //data: Array(plot_size).fill(null),
+                                data: db_bme280_pres,
+                                fill: false,
+                                yAxisID: 'y2',
+                            },
+                            {
+                                label: "Humidity",
+                                backgroundColor: 'blue',
+                                borderColor: 'blue',
+                                //data: Array(plot_size).fill(null),
+                                data: db_bme280_humd,
+                                fill: false,
+                                yAxisID: 'y3',
+                            },
+                            {
+                                label: "Light",
+                                backgroundColor: 'green',
+                                borderColor: 'green',
+                                //data: Array(plot_size).fill(null),
+                                data: db_light,
+                                fill: false,
+                                yAxisID: 'y4',
+                            },
+                        ]
+                },
+                options:
+                {
+                    responsive: false,
+                    title:
+                    {
+                        display: true,
+                        text: 'Enviro Sensors'
+                    },
+                    tooltips:
+                    {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    hover:
+                    {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                    elements:
+                    {
+                        line:
+                        {
+                            tension: 1,
+                        },
+                        point:
+                        {
+                            radius: 0,
+                            borderWidth: 2,
+                            pointStyle: 'circle',
+                        },
+                    },
+                    scales:
+                    {
+                        xAxes:
+                            [{
+                                display: true,
+                                scaleLabel:
+                                {
+                                    display: true,
+                                    labelString: 'Time',
+                                }
+                            }],
+                        yAxes:
+                            [{
+                                ticks:
+                                {
+                                    min: 0,
+                                    max: 80,
+                                    fontColor: 'red',
+                                },
+                                display: true,
+                                scaleLabel:
+                                {
+                                    display: true,
+                                    labelString: 'Temperature (°C)',
+                                    fontColor: 'red',
+                                },
+                                id: 'y1',
+                                position: 'left',
+                            },
+                            {
+                                ticks:
+                                {
+                                    min: 800,
+                                    max: 1200,
+                                    fontColor: 'orange',
+                                },
+                                display: true,
+                                scaleLabel:
+                                {
+                                    display: true,
+                                    labelString: 'Pressure (hPa)',
+                                    fontColor: 'orange',
+                                },
+                                id: 'y2',
+                                position: 'left',
+                            },
+                            {
+                                ticks:
+                                {
+                                    min: 0,
+                                    max: 100,
+                                    fontColor: 'blue',
+                                },
+                                scaleLabel:
+                                {
+                                    display: true,
+                                    labelString: 'Humidity (%)',
+                                    fontColor: 'blue',
+                                },
+                                id: 'y3',
+                                position: 'right',
+                            },
+                            {
+                                ticks:
+                                {
+                                    min: 0,
+                                    max: 1000,
+                                    fontColor: 'green',
+                                },
+                                scaleLabel:
+                                {
+                                    display: true,
+                                    labelString: 'Light (lux)',
+                                    fontColor: 'green',
+                                },
+                                id: 'y4',
+                                position: 'right',
+                            }
+                            ]
+                    }
+                }
+            };
+            const config_gas =
+            {
+                type: 'line',
+                data:
+                {
+                    //labels: Array(plot_size).fill("00:00:00"),
+                    labels: db_time,
+                    datasets:
+                        [
+                            {
+                                label: "Gas Nitrous Dioxide",
+                                backgroundColor: 'green',
+                                borderColor: 'green',
+                                //data: Array(plot_size).fill(null),
+                                data: db_gas_reducing,
+                                fill: false,
+                                yAxisID: 'y1',
+                            },
+                            {
+                                label: "Gas Carbon Monoxide",
+                                backgroundColor: 'purple',
+                                borderColor: 'purple',
+                                //data: Array(plot_size).fill(null),
+                                data: db_gas_oxidising,
+                                fill: false,
+                                yAxisID: 'y2',
+                            },
+                            {
+                                label: "Gas Ammonia",
+                                backgroundColor: 'dimgray',
+                                borderColor: 'dimgray',
+                                //data: Array(plot_size).fill(null),
+                                data: db_gas_nh3,
+                                fill: false,
+                                yAxisID: 'y3',
+                            },
+                        ]
+                },
+                options:
+                {
+                    responsive: false,
+                    title:
+                    {
+                        display: true,
+                        text: 'Gas Sensors'
+                    },
+                    tooltips:
+                    {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    hover:
+                    {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                    elements:
+                    {
+                        line:
+                        {
+                            tension: 0,
+                        },
+                        point:
+                        {
+                            radius: 0,
+                            borderWidth: 2,
+                            pointStyle: 'circle',
+                        },
+                    },
+                    scales:
+                    {
+                        xAxes:
+                            [{
+                                display: true,
+                                scaleLabel:
+                                {
+                                    display: true,
+                                    labelString: 'Time',
+                                }
+                            }],
+                        yAxes:
+                            [{
+                                ticks:
+                                {
+                                    // min: 0.001,
+                                    // max: 100,
+                                    fontColor: 'green',
+                                },
+                                display: true,
+                                scaleLabel:
+                                {
+                                    display: true,
+                                    labelString: 'Nitrous Dioxide (ppm)',
+                                    fontColor: 'green',
+                                },
+                                id: 'y1',
+                                position: 'left',
+                            },
+                            {
+                                ticks:
+                                {
+                                    // min: 0.001,
+                                    // max: 100,
+                                    fontColor: 'purple',
+                                },
+                                display: true,
+                                scaleLabel:
+                                {
+                                    display: true,
+                                    labelString: 'Carbon Monoxide (ppm)',
+                                    fontColor: 'purple',
+                                },
+                                id: 'y2',
+                                position: 'right',
+                            },
+                            {
+                                ticks:
+                                {
+                                    // min: 0.001,
+                                    // max: 100,
+                                    fontColor: 'dimgray',
+                                },
+                                scaleLabel:
+                                {
+                                    display: true,
+                                    labelString: 'Ammonia (ppm)',
+                                    fontColor: 'dimgray',
+                                },
+                                id: 'y3',
+                                position: 'right',
+                            }
+                            ]
+                    }
+                }
+            };
+
+            // Get chart elements from html id tags
+            const context_bme280 = document.getElementById('chart_bme280').getContext('2d');
+            const context_gas = document.getElementById('chart_gas').getContext('2d');
+
+            // Create chart objects
+            const lineChart_bme280 = new Chart(context_bme280, config_bme280);
+            const lineChart_gas = new Chart(context_gas, config_gas);
+
+            const source = new EventSource("/JSON-data");
+            source.onmessage = function (event)
+            {
+                const data = JSON.parse(event.data);
+                if (config_bme280.data.labels.length === plot_size)
+                {
+                    config_bme280.data.labels.shift();
+                    config_bme280.data.datasets[0].data.shift();
+                    config_bme280.data.datasets[1].data.shift();
+                    config_bme280.data.datasets[2].data.shift();
+                    config_bme280.data.datasets[3].data.shift();
+
+                    config_gas.data.labels.shift();
+                    config_gas.data.datasets[0].data.shift();
+                    config_gas.data.datasets[1].data.shift();
+                    config_gas.data.datasets[2].data.shift();
+                    // config_gas.data.datasets[3].data.shift();
+
+                    db_cpu_temp.shift();
+                }
+                
+                config_bme280.data.labels.push(data.time);
+                config_bme280.data.datasets[0].data.push(data.value2.toFixed(2));
+                config_bme280.data.datasets[1].data.push(data.value3.toFixed(2));
+                config_bme280.data.datasets[2].data.push(data.value4.toFixed(2));
+                config_bme280.data.datasets[3].data.push(data.value5.toFixed(2));
+
+                config_gas.data.labels.push(data.time);
+                config_gas.data.datasets[0].data.push(data.value6);
+                config_gas.data.datasets[1].data.push(data.value7);
+                config_gas.data.datasets[2].data.push(data.value8);
+
+                db_cpu_temp.push(data.value1);
+
+                lineChart_bme280.update();
+                lineChart_gas.update();
+
+                // Update sensor table
+                // CPU Temp
+                document.getElementById("table_cpu_temp_cur").innerHTML = data.value1.toFixed(2);
+                document.getElementById("table_cpu_temp_min").innerHTML = Math.min(...db_cpu_temp).toFixed(2);
+                document.getElementById("table_cpu_temp_max").innerHTML = Math.max(...db_cpu_temp).toFixed(2);
+                // Sensor Temp
+                document.getElementById("table_sen_temp_cur").innerHTML = data.value2.toFixed(2);
+                document.getElementById("table_sen_temp_min").innerHTML = Math.min(...config_bme280.data.datasets[0].data.filter(v=>v!=null)).toFixed(2);
+                document.getElementById("table_sen_temp_max").innerHTML = Math.max(...config_bme280.data.datasets[0].data).toFixed(2);
+                // Sensor Pres
+                document.getElementById("table_sen_pres_cur").innerHTML = data.value3.toFixed(2);
+                document.getElementById("table_sen_pres_min").innerHTML = Math.min(...config_bme280.data.datasets[1].data.filter(v=>v!=null)).toFixed(2);
+                document.getElementById("table_sen_pres_max").innerHTML = Math.max(...config_bme280.data.datasets[1].data).toFixed(2);
+                // Sensor Humd
+                document.getElementById("table_sen_humd_cur").innerHTML = data.value4.toFixed(2);
+                document.getElementById("table_sen_humd_min").innerHTML = Math.min(...config_bme280.data.datasets[2].data.filter(v=>v!=null)).toFixed(2);
+                document.getElementById("table_sen_humd_max").innerHTML = Math.max(...config_bme280.data.datasets[2].data).toFixed(2);
+                // Sensor Ligh
+                document.getElementById("table_sen_ligh_cur").innerHTML = data.value5.toFixed(2);
+                document.getElementById("table_sen_ligh_min").innerHTML = Math.min(...config_bme280.data.datasets[3].data.filter(v=>v!=null)).toFixed(2);
+                document.getElementById("table_sen_ligh_max").innerHTML = Math.max(...config_bme280.data.datasets[3].data).toFixed(2);
+
+                //table_gas_oxid_cur
+                // Sensor Temp
+                document.getElementById("table_gas_oxid_cur").innerHTML = data.value6.toFixed(2);
+                document.getElementById("table_gas_oxid_min").innerHTML = Math.min(...config_gas.data.datasets[0].data.filter(v=>v!=null)).toFixed(2);
+                document.getElementById("table_gas_oxid_max").innerHTML = Math.max(...config_gas.data.datasets[0].data).toFixed(2);
+                // Sensor Pres
+                document.getElementById("table_gas_redu_cur").innerHTML = data.value7.toFixed(2);
+                document.getElementById("table_gas_redu_min").innerHTML = Math.min(...config_gas.data.datasets[1].data.filter(v=>v!=null)).toFixed(2);
+                document.getElementById("table_gas_redu_max").innerHTML = Math.max(...config_gas.data.datasets[1].data).toFixed(2);
+                // Sensor Humd
+                document.getElementById("table_gas_nh3_cur").innerHTML = data.value8.toFixed(2);
+                document.getElementById("table_gas_nh3_min").innerHTML = Math.min(...config_gas.data.datasets[2].data.filter(v=>v!=null)).toFixed(2);
+                document.getElementById("table_gas_nh3_max").innerHTML = Math.max(...config_gas.data.datasets[2].data).toFixed(2);
+
+                if (data.aruco_detected == "1")
+                {
+                    document.getElementById("table_aruco_id").innerHTML = data.aruco_id;
+                    document.getElementById("table_aruco_x").innerHTML = data.aruco_x.toFixed(2);
+                    document.getElementById("table_aruco_y").innerHTML = data.aruco_y.toFixed(2);
+                    document.getElementById("table_aruco_z").innerHTML = data.aruco_z.toFixed(2);
+                    // Update table values
+                    document.getElementById("table_target3_temp").innerHTML = data.value2.toFixed(2);
+                    document.getElementById("table_target3_pres").innerHTML = data.value3.toFixed(2);
+                    document.getElementById("table_target3_humd").innerHTML = data.value4.toFixed(2);
+                    document.getElementById("table_target3_ligh").innerHTML = data.value5.toFixed(2);
+                    document.getElementById("table_target3_oxid").innerHTML = data.value6.toFixed(2);
+                    document.getElementById("table_target3_redu").innerHTML = data.value7.toFixed(2);
+                    document.getElementById("table_target3_nh3").innerHTML = data.value8.toFixed(2);
+                    
+                    // Do run once operations on target detection
+                    if (target_detected_aruco == false)
+                    {
+                        target_detected_aruco = true;
+                        document.getElementById("target3_img").src="/static/images/target3.jpg";
+                        document.getElementById("table_target3_time").innerHTML = data.time;
+                        document.getElementById("table_target3_detected1").innerHTML = "";
+                        document.getElementById("table_target3_detected2").style.color = "green";
+                        new Audio('/static/audio/target_detected_aruco.mp3').play();
+                    }
+                }
+                else if (data.aruco45_detected == "1" && data.aruco_x < 99)
+                {
+                    // Update aruco marker coordinates in table
+                    document.getElementById("table_aruco45_id").innerHTML = data.aruco_id;
+                    document.getElementById("table_aruco45_x").innerHTML = data.aruco_x.toFixed(2);
+                    document.getElementById("table_aruco45_y").innerHTML = data.aruco_y.toFixed(2);
+                    document.getElementById("table_aruco45_z").innerHTML = data.aruco_z.toFixed(2);
+                    // Update table values
+                    document.getElementById("table_target4_temp").innerHTML = data.value2.toFixed(2);
+                    document.getElementById("table_target4_pres").innerHTML = data.value3.toFixed(2);
+                    document.getElementById("table_target4_humd").innerHTML = data.value4.toFixed(2);
+                    document.getElementById("table_target4_ligh").innerHTML = data.value5.toFixed(2);
+                    document.getElementById("table_target4_oxid").innerHTML = data.value6.toFixed(2);
+                    document.getElementById("table_target4_redu").innerHTML = data.value7.toFixed(2);
+                    document.getElementById("table_target4_nh3").innerHTML = data.value8.toFixed(2);
+                    // Control sample tube activation button
+                    if (data.aruco_z <= 0.7)
+                    {
+                        // console.log("Enable")
+                        //document.getElementById("button_deploy_ss").removeAttribute('disabled');
+                        document.getElementById("button_deploy_ss").disabled = false;
+                    }
+                    else if (data.aruco_z > 0.8)
+                    {
+                        // console.log("Disable")
+                        //document.getElementById("button_deploy_ss").setAttribute('disabled', 'disabled');
+                        document.getElementById("button_deploy_ss").disabled = true;
+                    }
+                    // Do run once operations on target detection
+                    if (target_detected_aruco45 == false)
+                    {
+                        target_detected_aruco45 = true;
+                        document.getElementById("target4_img").src="/static/images/target4.jpg";
+                        document.getElementById("table_target4_time").innerHTML = data.time;
+                        document.getElementById("table_target4_detected1").innerHTML = "";
+                        document.getElementById("table_target4_detected2").style.color = "green";
+                        new Audio('/static/audio/target_detected_aruco45.mp3').play();
+                    }
+                }
+                else if (data.target2_detected == "1" && data.aruco_x < 99)
+                {
+                    document.getElementById("table_target2_temp").innerHTML = data.value2.toFixed(2);
+                    document.getElementById("table_target2_pres").innerHTML = data.value3.toFixed(2);
+                    document.getElementById("table_target2_humd").innerHTML = data.value4.toFixed(2);
+                    document.getElementById("table_target2_ligh").innerHTML = data.value5.toFixed(2);
+                    document.getElementById("table_target2_oxid").innerHTML = data.value6.toFixed(2);
+                    document.getElementById("table_target2_redu").innerHTML = data.value7.toFixed(2);
+                    document.getElementById("table_target2_nh3").innerHTML = data.value8.toFixed(2);
+
+                    if (target_detected_valve == false)
+                    {
+                        target_detected_valve = true;
+                        document.getElementById("target2_img").src="/static/images/target2.jpg";
+                        document.getElementById("table_target2_time").innerHTML = data.time;
+                        if (data.target2_id == "1")
+                        {
+                            document.getElementById("table_target2_detected1").innerHTML = "OPEN";
+                            document.getElementById("table_target2_detected2").style.color = "blue";
+                            new Audio('/static/audio/target_detected_open_valve.mp3').play();
+                        }
+                        else if (data.target2_id == "2")
+                        {
+                            document.getElementById("table_target2_detected1").innerHTML = "CLOSED";
+                            document.getElementById("table_target2_detected2").style.color = "blue";
+                            new Audio('/static/audio/target_detected_closed_valve.mp3').play();
+                        }
+                        document.getElementById("table_target2_detected2").style.color = "green";
+                    }
+                }
+                else if (data.target1_detected == "1")
+                {
+                    document.getElementById("table_target1_temp").innerHTML = data.value2.toFixed(2);
+                    document.getElementById("table_target1_pres").innerHTML = data.value3.toFixed(2);
+                    document.getElementById("table_target1_humd").innerHTML = data.value4.toFixed(2);
+                    document.getElementById("table_target1_ligh").innerHTML = data.value5.toFixed(2);
+                    document.getElementById("table_target1_oxid").innerHTML = data.value6.toFixed(2);
+                    document.getElementById("table_target1_redu").innerHTML = data.value7.toFixed(2);
+                    document.getElementById("table_target1_nh3").innerHTML = data.value8.toFixed(2);
+
+                    if (target_detected_fire == false)
+                    {
+                        target_detected_fire = true;
+                        document.getElementById("target1_img").src="/static/images/target1.jpg";
+                        document.getElementById("table_target1_time").innerHTML = data.time;
+                        document.getElementById("table_target1_detected1").innerHTML = "";
+                        document.getElementById("table_target1_detected2").style.color = "green";
+                        new Audio('/static/audio/target_detected_fire_extinguisher.mp3').play();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

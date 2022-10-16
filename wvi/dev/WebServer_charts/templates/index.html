@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphs</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+</head>
+<body style="background-color:lightgrey">
+    <div id="canvas1" style="position:absolute; top:100px; left:800px; z-index:1">
+    <canvas id="lineChart" width="900" height="400" style="background-color: white; border:1px solid #010101;"></canvas>
+    </div>
+    <script>
+        var ctx = document.getElementById("lineChart").getContext("2d");
+        var lineChart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: {{ labels | safe }},
+                datasets: [
+                    {
+                        label: "CPU Temperature",
+                        data: {{ values | safe }},
+                        fill: true,
+                        borderColor: "rgb(75,192,192)",
+                        lineTension: 0.1
+                    }
+                ]
+            },
+            options: {
+                responsive: false
+            }
+        });
+    </script>
+
+    <div id="canvas2" style="position:absolute; top:100px; left:100px; z-index:1">
+<!--
+    <canvas id="video_feed" width="640" height="480" style="border:1px solid #010101;">
+    
+    </canvas>
+-->
+    <h4>Video Feed</h4>
+    <img id="bg" class="center" src="{{ url_for('video_feed') }}" width="320" height="240" style="border:1px solid #010101">
+    </div>
+    
+</body>
+</html>

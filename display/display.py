@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 
 # Displays the current IP address and current time to the envrio+ lcd.
 # Display updates every 10 seconds
@@ -47,6 +47,8 @@ font_size = 20
 font = ImageFont.truetype(UserFont, font_size)
 text_colour = (255, 255, 255)
 back_colour = (0, 170, 170)
+font1_size = 18
+font1 = ImageFont.truetype(UserFont, font1_size)
 
 # message = "Hello, World!"
 
@@ -59,9 +61,11 @@ while True:
 
     # Draw background rectangle and write text.
     draw.rectangle((0, 0, 160, 80), back_colour)
-    draw.text((1, 1), "IP Address", font=font, fill=text_colour)
-    draw.text((1, 24), messageIP, font=font, fill=text_colour)
-    draw.text((1, 48), "Time", font=font, fill=text_colour)
-    draw.text((60, 48), messageDT, font=font, fill=text_colour)
+    #draw.text((1, 1), "IP Address", font=font, fill=text_colour)
+    draw.text((1, 0), "user: group12", font=font1, fill=text_colour)
+    draw.text((1,18), "password: 1234", font=font1, fill=text_colour)
+    draw.text((1, 38), messageIP, font=font, fill=text_colour)
+    draw.text((1, 58), "Time", font=font, fill=text_colour)
+    draw.text((60, 58), messageDT, font=font, fill=text_colour)
     disp.display(img)
     sleep(10)
